@@ -47,3 +47,13 @@ po/*~
 
 # RStudio Connect folder
 rsconnect/
+
+# Output
+output/
+Rplots.pdf
+
+# Others
+~$*
+*~
+.DS_Store
+Thumbs.db
