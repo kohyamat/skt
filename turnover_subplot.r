@@ -22,8 +22,8 @@ turnover_subplot <- function(d, grid_size, area, dbh_min, n_tree_min) {
     res$N <- res$N / area # per-ha period mean number of stems
     res$B <- res$B / area # per-ha period mean biomass
     res$Bl <- res$Bl / area # per-ha period mean biomass
-    res$R <- res$r * res$N # absolute recruitment rate
-    res$M <- res$m * res$N # absolute mortality rate
+    # res$R <- res$r * res$N # absolute recruitment rate
+    # res$M <- res$m * res$N # absolute mortality rate
     res$P <- res$p * res$B # absolute productivity rate
     res$L <- res$l * res$B # absolute loss rate
     toleft <- c("sub_id", "species")

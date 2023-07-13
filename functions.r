@@ -181,8 +181,8 @@ est_turnover_rates <- function(dbh1, dbh2, t, dbh_min = 1.0) {
   b_m <- period_mean(b_0, b_t) # period mean biomass
   bl_m <- period_mean(bl_0, bl_t) # period mean leaf biomass
 
-  r <- turnover(q1 + q3, q1, t) # relative recruitment rate
-  m <- turnover(q1 + q2, q1, t) # relative mortality rate
+  # r <- turnover(q1 + q3, q1, t) # relative recruitment rate
+  # m <- turnover(q1 + q2, q1, t) # relative mortality rate
   p <- turnover(w2, q1 * w1, t) # relative above ground biomass productivity rate
   l <- turnover(w1, q1 * w1, t) # relative above ground biomass loss rate
   pl <- turnover(wl2, q1 * wl1, t) # relative leaf mass productivity rate
@@ -200,8 +200,8 @@ est_turnover_rates <- function(dbh1, dbh2, t, dbh_min = 1.0) {
     "N" = n_m,
     "B" = b_m,
     "Bl" = bl_m,
-    "r" = r,
-    "m" = m,
+    # "r" = r,
+    # "m" = m,
     "p" = p,
     "l" = l,
     "pl" = pl,
