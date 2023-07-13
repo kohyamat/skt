@@ -34,4 +34,4 @@ The provided dataset of tropical forest plot is a processed subset of the origin
 
 ## License
 
-The data files are licensed under the [Creative Commons Attribution 4.0 International License] (https://github.com/kohyamat/p-B/blob/main/LICENSE-CC-BY), and the R codes are licensed under the [MIT License](LICENSE).
+The data files are licensed under the [Creative Commons Attribution 4.0 International License](https://github.com/kohyamat/p-B/blob/main/LICENSE-CC-BY), and the R codes are licensed under the [MIT License](LICENSE).
