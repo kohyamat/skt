@@ -159,10 +159,6 @@ dn$qi <- dn$vi / (dn$ui - dn$vi)
 dn <- subset(dn, ri > 0) # remove lethal species (3 species)
 dn <- subset(dn, ui > 0) # remove conspecific facilitation (one species)
 dn <- subset(dn, vi > 0)
-dn <- subset(dn, species != "CYNOMA") # remove one outlier species  "CYNOMA"
-
-dn <- subset(dn, (ri > 0) & (ui > 0) & (vi > 0))
-dn <- subset(dn, species != "CYNOMA") # remove one outlier species  "CYNOMA"
 
 N <- nrow(dn) # Species pool, 485 spp.
 
