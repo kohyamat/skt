@@ -6,7 +6,7 @@ These files are R codes and data files used for calculating competition model pa
 ### Paper
 
 Takashi S. Kohyama, Nanako Shigesada, Kokichi Kawasaki, Matthew D. Potts, Zamah S. Nur Hajar, Tetsuo I. Kohyama, and Douglas Sheil,
-"Competition can explain rainforest tree diversity and predict species abundance
+"A simple competition model predicts rainforest tree diversity and relative abundance"
 
 ## Contents
 
