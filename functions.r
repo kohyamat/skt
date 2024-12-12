@@ -181,13 +181,11 @@ est_turnover_rates <- function(dbh1, dbh2, t, dbh_min = 1.0) {
   b_m <- period_mean(b_0, b_t) # period mean biomass
   bl_m <- period_mean(bl_0, bl_t) # period mean leaf biomass
 
-  # r <- turnover(q1 + q3, q1, t) # relative recruitment rate
-  # m <- turnover(q1 + q2, q1, t) # relative mortality rate
-  p <- turnover(w2, q1 * w1, t) # relative above ground biomass productivity rate
-  l <- turnover(w1, q1 * w1, t) # relative above ground biomass loss rate
-  pl <- turnover(wl2, q1 * wl1, t) # relative leaf mass productivity rate
-  ll <- turnover(wl1, q1 * wl1, t) # relative leaf mass loss rate
-
+  p <-  turnover(w2, q1 * w1, t) # relative aboveground biomass productivity rate
+  p_g <- turnover(q1 * w2, q1 * w1, t) # relative AGB productivity rate by growth
+  p_f <- p - p_g # relative AGB productivity by recruits
+  l <- turnover(w1, q1 * w1, t) # relative AGB loss rate by mortality
+ 
   u_0 <- max(w1)
   u_t <- max(w2)
   umax <- period_mean(u_0, u_t)
@@ -200,12 +198,10 @@ est_turnover_rates <- function(dbh1, dbh2, t, dbh_min = 1.0) {
     "N" = n_m,
     "B" = b_m,
     "Bl" = bl_m,
-    # "r" = r,
-    # "m" = m,
     "p" = p,
+    "p_g" = p_g,
+    "p_f" = p_f,
     "l" = l,
-    "pl" = pl,
-    "ll" = ll,
     "Umax" = umax,
     "Ux" = ux,
     "Udmax" = udmax,

@@ -46,7 +46,7 @@ turnover_subplot <- function(ds, dbh_min, area, n_tree_min) {
   res$N <- res$N / area # per-ha period mean number of stems
   res$B <- res$B / area # per-ha period mean biomass
   res$Bl <- res$Bl / area # per-ha period mean biomass
-  res$P <- res$p * res$B # absolute productivity rate
+  res$P <- (res$p_g + res$p_f) * res$B # absolute productivity rate
   res$L <- res$l * res$B # absolute loss rate
   to_left <- c("subplot", "species")
   return(res[, c(to_left, colnames(res)[!(colnames(res) %in% to_left)])])
@@ -61,21 +61,21 @@ df1 <- do.call(rbind, df1)
 write.csv(df1, file = file.path(outdir, "res_turnovers_100by100.csv"), row.names = FALSE, quote = FALSE)
 
 # F ~ B parameter estimation (Eq. 1)
-fitF <- glmmTMB(log(Bl) ~ log(B) + (1 | species),
-  weights = B^(2 / 3),
+fitF <- glmmTMB(log(Bl) ~ log(B) + (1 + log(B) | species),
   data = df1,
 )
 bi <- coef(fitF)$cond$species[, 1]
-k <- mean(coef(fitF)$cond$species[, 2])
+ai <- coef(fitF)$cond$species[, 2]
 predF <- data.frame(
   "bi" = exp(bi + sigma(fitF)^2 / 2), # fix the lognormal-distribution bias
+  "ai" = ai,
   "species" = rownames(coef(fitF)$cond$species)
 )
 
 # Merge predictions to df1
 df1 <- merge(df1, predF, by = "species")
-df1$x <- df1$B^k
-df1$bx <- df1$bi * df1$B^k
+df1$x <- df1$B^df1$ai
+df1$bx <- df1$bi * df1$B^df1$ai
 
 # Subplot-level aggragation
 agg_func_sub <- function(dat) {
@@ -134,23 +134,29 @@ df1 <- within(df1, {
   bysum <- bxsum / mean(bxsum)
 })
 
-# Woody producrivity model
-fitp <- glmmTMB(p ~ 1 + by + byh + (1 + by + byh | species),
+# producrivity_growth model
+fitg <- glmmTMB(p_g ~ 1 + by + byh + (1 + by + byh | species),
   REML = TRUE,
   data = df1,
-  start = list(theta = rep(log(10), 6))
-) # selected model by AIC
+  start = list(theta = rep(0, 6))
+) 
 
-# Woody loss rate model
+# prouctivity_recruit model
+fitf <- glmmTMB(p_f ~ 1 + (1 | species),
+  data = df1
+)
+
+# loss rate model
 fitl <- glmmTMB(l ~ 1 + (1 | species),
   data = df1
 )
 
 dn <- data.frame(
-  "species" = rownames(coef(fitp)$cond$species),
-  "cf1" = coef(fitp)$cond$species[, 1],
-  "cf2" = coef(fitp)$cond$species[, 2] / mean(df1$bx),
-  "cf3" = coef(fitp)$cond$species[, 3] / mean(df1$bxh),
+  "species" = rownames(coef(fitg)$cond$species),
+  "cf1" = coef(fitg)$cond$species[, 1],
+  "cf2" = coef(fitg)$cond$species[, 2] / mean(df1$bx),
+  "cf3" = coef(fitg)$cond$species[, 3] / mean(df1$bxh),
+  "cff1" = coef(fitf)$cond$species[, 1],
   "cfl1" = coef(fitl)$cond$species[, 1]
 )
 
@@ -159,8 +165,8 @@ dn <- merge(dn, df_sp, by = "species") # adding bi
 
 # Parameters of Eq. 1
 dn <- within(dn, {
-  ri <- cf1 - cfl1
-  di <- cfl1
+  ri <- cf1 + cff1 - cfl1
+  mi <- cfl1
   ui <- -cf2
   vi <- -cf3
   inv <- ri / vi # species invasibility
@@ -182,7 +188,7 @@ dn <- within(dn, Ci <- cumsum(inv * qi) / (1 + cumsum(qi))) # C(i)
 dn <- within(dn, {
   coex <- sign(inv - Ci)
   bx_con <- ri / ui
-  B_con <- (ri / (ui * bi))^(1 / k)
+  B_con <- (ri / (ui * bi))^(1 / ai)
 })
 
 dP <- subset(dn, coex > 0) # positive species
@@ -192,7 +198,7 @@ Cs <- dn$Ci[s] # C(s)
 
 dP <- within(dP, {
   bx_eq <- (inv - Cs) * qi
-  B_eq <- (bx_eq / bi)^(1 / k)
+  B_eq <- (bx_eq / bi)^(1 / ai)
   cum_bx_eq <- cumsum(bx_eq)
   cum_B_eq <- cumsum(B_eq)
   P_eq <- cfl1 * B_eq
@@ -248,9 +254,10 @@ output_cols <- c(
   "r_obs",
   "P_obs",
   "ri",
-  "di",
+  "mi",
   "ui",
   "vi",
+  "ai",
   "bi",
   "inv",
   "Ci",
