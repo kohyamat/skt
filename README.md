@@ -1,5 +1,3 @@
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&icon_names=open_in_new" >
-
 # SKT
 
 These files are R codes and data files used for calculating competition model parameters of tree species in tropical forest community.
@@ -7,10 +5,9 @@ These files are R codes and data files used for calculating competition model pa
 
 ### Paper
 
-Takashi S. Kohyama, Nanako Shigesada, Kokichi Kawasaki, Matthew D. Potts, Zamah S. Nur Hajar, Tetsuo I. Kohyama, and Douglas Sheil (2025) A simple competition model can predict rainforest tree diversity, species abundance and ecosystem functions, Journal of Ecology, 113, 842&#x2013;855. 
-<a href="https://doi.org/10.1111/1365-2745.14485">DOI:10.1111/1365-2745.14485</a>
-
-
+Takashi S. Kohyama, Nanako Shigesada, Kokichi Kawasaki, Matthew D. Potts, Zamah S. Nur Hajar, Tetsuo I. Kohyama, and Douglas Sheil,
+"A simple competition model can predict rainforest tree diversity, species abundance and ecosystem functions"
+*in press.*
 
 ## Contents
 
